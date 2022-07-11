@@ -17,25 +17,33 @@ export default {
   name: 'App',
   data() {
     return {
-      todoItems: []
+      todoItems: [],
+      cnt: 0
     }
   },
   methods: {
     addTodo(todoItem) {
-      if(todoItem in localStorage){
-        alert('중복된값은 입력할 수 없습니다.');
-      } else {
-        this.todoItems.push(todoItem);
-      }
-      localStorage.setItem(todoItem, todoItem);
+      this.todoItems.push({
+        key: this.cnt++,
+        value: todoItem
+      });
     },
-    removeTodo(todoitem, idx) {
-      localStorage.removeItem(todoitem, idx);
-      this.todoItems.splice(idx, 1);
+    removeTodo(key) {
+      // this.todoItems.splice(idx, 1);
+      this.todoItems.forEach((item, idx) => {
+        if(item.key === key) {
+          this.todoItems.splice(idx, 1);
+        }
+      })
     },
     clearTodo(){
       this.todoItems.splice(0);
-      localStorage.clear();
+      this.cnt = 0;
+    },
+    changeValue() {
+      const json = JSON.stringify(this.todoItems);
+      localStorage.setItem('todoItems', json);
+      localStorage.setItem('cnt', this.cnt);
     }
   },
   components: {
@@ -44,11 +52,23 @@ export default {
     TodoList,
     TodoFooter
   },
+  watch: {
+    todoItems: {
+      deep: true,//todoItems배열안의 값이 변하는걸 감지 (레퍼런스타입) .이두개 /주소값이 바뀌는걸 감지하는건 false 문자,숫자 (프라모티브타입) .이 한개/
+      handler() {
+        this.changeValue();
+      }
+    }
+  },
   created() {
-    if(localStorage.length > 0) {
-        for(let i=0; i<localStorage.length; i++) {
-            this.todoItems.push(localStorage.key(i));
-        }
+    const json = localStorage.getItem("todoItems");
+    if(json) {
+      const todoItems = JSON.parse(json);
+      todoItems.forEach(item => {
+        this.todoItems.push(item);
+      });
+      const cnt = localStorage.getItem("cnt");
+      this.cnt = cnt;
     }
   }
 }

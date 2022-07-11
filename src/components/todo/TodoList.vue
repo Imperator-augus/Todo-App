@@ -1,25 +1,25 @@
 <template>
   <section>
-    <ul>
-        <li :key="todoItem" v-for="(todoItem, index) in propsItems" class="shadow">
+    <transition-group name="list" tag="ul">
+        <li :key="todoItem.key" v-for="(todoItem) in propsItems" class="shadow">
             <i class="checkBtn fas fa-check" aria-hidden="true"></i>
-            {{ todoItem }}
-            <span class="removeBtn" type="button" @click="removeTodo(todoItem, index)">
+            {{ todoItem.value }}
+            <span class="removeBtn" type="button" @click="removeTodo(todoItem.key)">
                 <i class="far fa-trash-alt" aria-hidden="true"></i>
             </span>
         </li>
-    </ul>
+    </transition-group>
   </section>
 </template>
 
 <script>
 export default {
     props: {
-        propsItems: Array
+        propsItems: Array    //todoItems
     },
     methods: {
-        removeTodo(todoItem, index) {
-            this.$emit('childRemoveTodo', todoItem, index);
+        removeTodo(key) {
+            this.$emit('childRemoveTodo', key);
         }
     },
     
@@ -27,6 +27,8 @@ export default {
 </script>
 
 <style>
+    .list-enter-active, .list-leave-active { transition: all 1s; }
+    .list-enter-from, .list-leave-to { opacity: 0; transform: translateY(30px); }
     ul{ list-style-type: none; padding-left: 0; margin-top: 0; text-align: left; }
     li { 
         display: flex; min-height: 50px; height: 50px; line-height: 50px; margin: 0.5rem 0;
