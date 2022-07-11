@@ -1,31 +1,37 @@
 <template>
     <div id="app">
       <TodoHeader></TodoHeader>
-      <TodoInput @childAddTodo="addTodo"></TodoInput>
+      <TodoInput @childAddTodo="addTodo" @modal="modal"></TodoInput>
       <TodoList @childRemoveTodo="removeTodo" v-bind:propsItems="todoItems"></TodoList>
       <TodoFooter @clearTodo="clearTodo"></TodoFooter>
     </div>
+    <AlertModal @close="close" :show="modalShow" header="알림창" body="내용을 입력해 주세요." ></AlertModal>
 </template>
 
 <script>
-import TodoHeader from './components/todo/TodoHeader.vue'
-import TodoInput from './components/todo/TodoInput.vue'
-import TodoList from './components/todo/TodoList.vue'
-import TodoFooter from './components/todo/TodoFooter.vue'
+import TodoHeader from './components/todo/TodoHeader.vue';
+import TodoInput from './components/todo/TodoInput.vue';
+import TodoList from './components/todo/TodoList.vue';
+import TodoFooter from './components/todo/TodoFooter.vue';
+import AlertModal from './components/common/AlertModal.vue';
 
 export default {
   name: 'App',
   data() {
     return {
       todoItems: [],
-      cnt: 0
+      cnt: 0,
+      modalShow: false,
     }
   },
   methods: {
     addTodo(todoItem) {
+      // if(!todoItem){
+      //   return this.modalShow = true;
+      // }
       this.todoItems.push({
         key: this.cnt++,
-        value: todoItem
+        value: todoItem,
       });
     },
     removeTodo(key) {
@@ -44,13 +50,20 @@ export default {
       const json = JSON.stringify(this.todoItems);
       localStorage.setItem('todoItems', json);
       localStorage.setItem('cnt', this.cnt);
-    }
+    },
+    close() {
+      this.modalShow = false;
+    },
+    modal() {
+      this.modalShow = true;
+    } 
   },
   components: {
     TodoHeader,
     TodoInput,
     TodoList,
-    TodoFooter
+    TodoFooter,
+    AlertModal
   },
   watch: {
     todoItems: {
