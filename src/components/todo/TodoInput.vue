@@ -38,7 +38,8 @@ export default {
     addTodo() {
       if(this.newTodoItem.trim() !== '') {
         const value = this.newTodoItem.trim();//양쪽의 빈칸을 지우는 메소드(trim)
-        localStorage.setItem(value, value);
+        // localStorage.setItem(value, value);
+        this.$emit('childAddTodo', value);//app.vue와연결 값은, 하고 추가가능
       }
       this.newTodoItem = '';
     }

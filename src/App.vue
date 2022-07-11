@@ -1,9 +1,9 @@
 <template>
     <div id="app">
       <TodoHeader></TodoHeader>
-      <TodoInput></TodoInput>
-      <TodoList></TodoList>
-      <TodoFooter></TodoFooter>
+      <TodoInput @childAddTodo="addTodo"></TodoInput>
+      <TodoList @childRemoveTodo="removeTodo" v-bind:propsItems="todoItems"></TodoList>
+      <TodoFooter @clearTodo="clearTodo"></TodoFooter>
     </div>
 </template>
 
@@ -15,11 +15,41 @@ import TodoFooter from './components/todo/TodoFooter.vue'
 
 export default {
   name: 'App',
+  data() {
+    return {
+      todoItems: []
+    }
+  },
+  methods: {
+    addTodo(todoItem) {
+      if(todoItem in localStorage){
+        alert('중복된값은 입력할 수 없습니다.');
+      } else {
+        this.todoItems.push(todoItem);
+      }
+      localStorage.setItem(todoItem, todoItem);
+    },
+    removeTodo(todoitem, idx) {
+      localStorage.removeItem(todoitem, idx);
+      this.todoItems.splice(idx, 1);
+    },
+    clearTodo(){
+      this.todoItems.splice(0);
+      localStorage.clear();
+    }
+  },
   components: {
     TodoHeader,
     TodoInput,
     TodoList,
     TodoFooter
+  },
+  created() {
+    if(localStorage.length > 0) {
+        for(let i=0; i<localStorage.length; i++) {
+            this.todoItems.push(localStorage.key(i));
+        }
+    }
   }
 }
 </script>
