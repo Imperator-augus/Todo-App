@@ -1,11 +1,11 @@
 <template>
     <div id="app">
       <TodoHeader></TodoHeader>
-      <TodoInput @childAddTodo="addTodo" @modal="modal"></TodoInput>
+      <TodoInput @childAddTodo="addTodo" @modal="showModal"></TodoInput>
       <TodoList @childRemoveTodo="removeTodo" v-bind:propsItems="todoItems"></TodoList>
       <TodoFooter @clearTodo="clearTodo"></TodoFooter>
     </div>
-    <AlertModal @close="close" :show="modalShow" header="알림창" body="내용을 입력해 주세요." ></AlertModal>
+    <AlertModal @modalClose="closeModal" @close="closeModal" :show="modalShow" header="알림창" body="내용을 입력해 주세요." ></AlertModal>
 </template>
 
 <script>
@@ -26,9 +26,6 @@ export default {
   },
   methods: {
     addTodo(todoItem) {
-      // if(!todoItem){
-      //   return this.modalShow = true;
-      // }
       this.todoItems.push({
         key: this.cnt++,
         value: todoItem,
@@ -51,10 +48,10 @@ export default {
       localStorage.setItem('todoItems', json);
       localStorage.setItem('cnt', this.cnt);
     },
-    close() {
+    closeModal() {
       this.modalShow = false;
     },
-    modal() {
+    showModal() {
       this.modalShow = true;
     } 
   },

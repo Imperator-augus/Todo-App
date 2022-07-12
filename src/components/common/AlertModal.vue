@@ -12,8 +12,8 @@ export default {
 <template>
   <Transition name="modal">
     <div v-if="show" class="modal-mask">
-      <div class="modal-wrapper">
-        <div class="modal-container">
+      <div class="modal-wrapper" @click="$emit('modalClose')">
+        <div class="modal-container" @click.stop>
           <div class="modal-header">
             <slot name="header">{{ header }}</slot>
           </div>
@@ -24,7 +24,6 @@ export default {
 
           <div class="modal-footer">
             <slot name="footer">
-              default footer
               <button
                 class="modal-default-button"
                 @click="$emit('close')"
