@@ -77,12 +77,13 @@ export default {
     TodoFooter,
     AlertModal
   }, 
-  created () {  
+  created () {  //디비에입력되있는 todo리스트를 가져와서 todoItems에 넣어줌
    axios.get('/todo/index')
    .then(res => {
      if(res.status === 200 && res.data.length > 0) {
        res.data.forEach(item => {
          this.todoItems.push(item);
+         console.log(item);
        });
      }
      console.log(res);
