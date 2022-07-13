@@ -11,7 +11,7 @@ class TodoController extends Controller {
             case _GET:
                 return $this->model->selTodoList();
             case _POST:
-                $json = getJson();                
+                $json = getJson();     //배열로받음           
                 return [_RESULT => $this->model->insTodo($json)];
             case _DELETE:
                 $urlPaths = getUrlPaths();
