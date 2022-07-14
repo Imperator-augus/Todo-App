@@ -41,7 +41,7 @@ export default {
         localStorage.setItem(value, value);
         this.$emit('childAddTodo', this.newTodoItem);//app.vue와연결 값은, 하고 추가가능
       }else {
-        this.$emit('modal');
+        this.$emit('noInputValue');
       }
       this.newTodoItem = '';
     }
